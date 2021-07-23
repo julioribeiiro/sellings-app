@@ -4,12 +4,12 @@ import Chart from 'react-apexcharts';
 import salesServices from 'services/salesServices';
 import { SaleSum } from 'types/sale';
 
-const DonutChart = () => {
-    type ChartData = {
-        series: number[];
-        labels: string[];
-    };
+type ChartData = {
+    series: number[];
+    labels: string[];
+};
 
+const DonutChart = () => {
     const [chartData, setChartData] = useState<ChartData>({
         labels: [],
         series: [],
@@ -30,10 +30,7 @@ const DonutChart = () => {
                     treatedData.labels.push(elem.sellerName);
                     treatedData.series.push(elem.sum);
                 });
-                setChartData({
-                    labels: treatedData.labels,
-                    series: treatedData.series,
-                });
+                setChartData(treatedData);
                 setChartLoading(false);
             })
             .catch(error => console.log('Something went wrong', error));
@@ -48,9 +45,7 @@ const DonutChart = () => {
     return (
         <div>
             {chartLoading ? (
-                <h5 className="text-center mt-5">
-                    Loading... {console.log(`RETRIVING DATA`)}{' '}
-                </h5>
+                <h5 className="text-center mt-5">Loading...</h5>
             ) : (
                 <Chart
                     options={{ ...options, labels: chartData.labels }}

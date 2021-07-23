@@ -1,5 +1,7 @@
 import httpClient from '../http-common';
-import { AMOUNT } from 'utils/requests';
+import { AMOUNT, SUCCESS } from 'utils/requests';
 
 const getAmountBySellers = () => httpClient.get(`${AMOUNT}`);
-export default { getAmountBySellers };
+const getSucessBySellers = () => httpClient.get(`${SUCCESS}`);
+
+export default { getAmountBySellers, getSucessBySellers };

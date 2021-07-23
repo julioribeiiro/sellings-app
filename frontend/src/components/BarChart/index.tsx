@@ -1,4 +1,21 @@
+import { useEffect } from 'react';
+import { useState } from 'react';
 import Chart from 'react-apexcharts';
+import salesServices from 'services/salesServices';
+import { SaleSuccess } from 'types/sale';
+import { round } from 'utils/format';
+
+type ChartData = {
+    labels: {
+        categories: string[];
+    };
+    series: [
+        {
+            name: string;
+            data: number[];
+        },
+    ];
+};
 
 const BarChart = () => {
     const options = {
@@ -9,25 +26,61 @@ const BarChart = () => {
         },
     };
 
-    const mockData = {
+    const [chartData, setChartData] = useState<ChartData>({
         labels: {
-            categories: ['Anakin', 'Barry Allen', 'Kal-El', 'Logan', 'Padmé'],
+            categories: [],
         },
         series: [
             {
-                name: '% Success',
-                data: [43.6, 67.1, 67.7, 45.6, 71.1],
+                name: '% Sucess',
+                data: [],
             },
         ],
-    };
+    });
+
+    const [chartLoading, setChartLoading] = useState(true);
+
+    useEffect(() => {
+        salesServices
+            .getSucessBySellers()
+            .then(response => {
+                const data = response.data as SaleSuccess[];
+                const treatedData = {
+                    labels: {
+                        categories: [],
+                    },
+                    series: [
+                        {
+                            name: '% Sucess',
+                            data: [],
+                        },
+                    ],
+                } as ChartData;
+                data.map(elem => {
+                    treatedData.labels.categories.push(elem.sellername);
+                    treatedData.series[0].data.push(
+                        round((100 * elem.deals) / elem.visited, 1),
+                    );
+                });
+                setChartData(treatedData);
+                setChartLoading(false);
+            })
+            .catch(error => console.log('Something went wrong', error));
+    }, []);
 
     return (
-        <Chart
-            options={{ ...options, xaxis: mockData.labels }}
-            series={mockData.series}
-            type="bar"
-            height="240"
-        />
+        <div>
+            {chartLoading ? (
+                <h5 className="text-center mt-5">Loading...</h5>
+            ) : (
+                <Chart
+                    options={{ ...options, xaxis: chartData.labels }}
+                    series={chartData.series}
+                    type="bar"
+                    height="240"
+                />
+            )}
+        </div>
     );
 };
 
