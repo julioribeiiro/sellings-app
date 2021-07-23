@@ -1,28 +1,25 @@
-package com.julioapps.sellingsapp.entities;
+package com.julioapps.sellingsapp.dto;
 
-import javax.persistence.*;
+import com.julioapps.sellingsapp.entities.Sale;
+import com.julioapps.sellingsapp.entities.Seller;
+
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "tb_sales")
-public class Sale {
+public class SaleDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer visited;
     private Integer deals;
     private Double amount;
     private LocalDate date;
 
-    @ManyToOne
-    @JoinColumn(name = "seller_id")
-    private Seller seller;
+    private SellerDTO seller;
 
-    public Sale(){
+    public SaleDTO(){
+
     }
 
-    public Sale(Long id, Integer visited, Integer deals, Double amount, LocalDate date, Seller seller) {
+    public SaleDTO(Long id, Integer visited, Integer deals, Double amount, LocalDate date, SellerDTO seller) {
         this.id = id;
         this.visited = visited;
         this.deals = deals;
@@ -31,8 +28,13 @@ public class Sale {
         this.seller = seller;
     }
 
-    public Sale(Long id) {
-        this.id = id;
+    public SaleDTO(Sale entity){
+        this.id = entity.getId();
+        this.visited = entity.getVisited();
+        this.deals = entity.getDeals();
+        this.amount = entity.getAmount();
+        this.date = entity.getDate();
+        this.seller = new SellerDTO(entity.getSeller());
     }
 
     public Long getId() {
@@ -75,11 +77,11 @@ public class Sale {
         this.date = date;
     }
 
-    public Seller getSeller() {
+    public SellerDTO getSeller() {
         return seller;
     }
 
-    public void setSeller(Seller seller) {
+    public void setSeller(SellerDTO seller) {
         this.seller = seller;
     }
 }
