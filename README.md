@@ -18,3 +18,7 @@
   * Back-end deployed in Heroku
 
 [Project in Netlify](https://juliomoraes-salesapp.netlify.app/dashboard).
+
+### Preview
+
+![image](https://user-images.githubusercontent.com/51688788/127025995-374c1ee5-a4a3-43be-933a-bc68e3abf2a7.png)
